@@ -1,0 +1,311 @@
+---------- test1 start ----------
+read file 0 page 4
+Buffer List:    004 (empty) (empty) (empty) 
+
+read file 1 page 1
+Buffer List:    103     004 (empty) (empty) 
+
+read file 0 page 5
+Buffer List:    005     103     004 (empty) 
+
+read file 0 page 5
+Buffer List:    005     103     004 (empty) 
+
+read file 0 page 5
+Buffer List:    005     103     004 (empty) 
+
+read file 1 page 0
+Buffer List:    102     005     103     004 
+
+read file 1 page 3
+Buffer List:    105     102     005     103 
+
+read file 0 page 1
+Buffer List:    003     105     102     005 
+
+read file 0 page 3
+Buffer List:    005     003     105     102 
+
+read file 0 page 3
+Buffer List:    005     003     105     102 
+
+read file 0 page 1
+Buffer List:    003     005     105     102 
+
+read file 0 page 3
+Buffer List:    005     003     105     102 
+
+read file 0 page 3
+Buffer List:    005     003     105     102 
+
+read file 0 page 3
+Buffer List:    005     003     105     102 
+
+read file 0 page 5
+Buffer List:    005     005     003     105 
+
+read file 1 page 5
+Buffer List:    105     005     005     003 
+
+read file 1 page 3
+Buffer List:    105     105     005     005 
+
+read file 0 page 5
+Buffer List:    005     105     105     005 
+
+read file 1 page 0
+Buffer List:    102     005     105     105 
+
+read file 0 page 0
+Buffer List:    002     102     005     105 
+---------- test1 end ----------
+
+---------- test2 start ----------
+  -------- files opened -------  
+
+read file 0 page 0
+Buffer List:    002 (empty) (empty) (empty) 
+
+write file 1 page 5 -> 1A5
+Buffer List:    1A5     002 (empty) (empty) 
+
+read file 1 page 1
+Buffer List:    103     1A5     002 (empty) 
+
+write file 1 page 4 -> 1B4
+Buffer List:    1B4     103     1A5     002 
+
+read file 0 page 3
+Buffer List:    005     1B4     103     1A5 
+
+write file 0 page 2 -> 0C2
+Buffer List:    0C2     005     1B4     103 
+
+read file 0 page 0
+Buffer List:    002     0C2     005     1B4 
+
+write file 1 page 3 -> 1D3
+Buffer List:    1D3     002     0C2     005 
+
+read file 0 page 0
+Buffer List:    002     1D3     0C2     005 
+
+write file 1 page 4 -> 1E4
+Buffer List:    1E4     002     1D3     0C2 
+
+read file 1 page 0
+Buffer List:    102     1E4     002     1D3 
+
+write file 0 page 2 -> 0F2
+Buffer List:    0F2     102     1E4     002 
+
+read file 0 page 4
+Buffer List:    004     0F2     102     1E4 
+
+write file 0 page 3 -> 0G3
+Buffer List:    0G3     004     0F2     102 
+
+read file 1 page 4
+Buffer List:    0G3     0G3     004     0F2 
+
+write file 0 page 5 -> 0H5
+Buffer List:    0H5     0G3     0G3     004 
+
+read file 0 page 4
+Buffer List:    004     0H5     0G3     0G3 
+
+write file 1 page 2 -> 1I2
+Buffer List:    1I2     004     0H5     0G3 
+
+read file 0 page 5
+Buffer List:    0H5     1I2     004     0G3 
+
+write file 1 page 4 -> 1J4
+Buffer List:    1J4     0H5     1I2     004 
+
+read file 1 page 5
+Buffer List:    0C2     1J4     0H5     1I2 
+
+write file 0 page 3 -> 0K3
+Buffer List:    0K3     0C2     1J4     0H5 
+
+read file 0 page 2
+Buffer List:    0H5     0K3     0C2     1J4 
+
+write file 0 page 4 -> 0L4
+Buffer List:    0L4     0H5     0K3     0C2 
+
+read file 0 page 2
+Buffer List:    0H5     0L4     0K3     0C2 
+
+write file 1 page 0 -> 1M0
+Buffer List:    1M0     0H5     0L4     0K3 
+
+read file 1 page 3
+Buffer List:    0F2     1M0     0H5     0L4 
+
+write file 1 page 4 -> 1N4
+Buffer List:    1N4     0F2     1M0     0H5 
+
+read file 0 page 2
+Buffer List:    0H5     1N4     0F2     1M0 
+
+write file 1 page 2 -> 1O2
+Buffer List:    1O2     0H5     1N4     0F2 
+
+read file 0 page 2
+Buffer List:    0H5     1O2     1N4     0F2 
+
+write file 0 page 5 -> 0P5
+Buffer List:    0P5     0H5     1O2     1N4 
+
+read file 1 page 0
+Buffer List:    1O2     0P5     0H5     1O2 
+
+write file 0 page 2 -> 0Q2
+Buffer List:    0Q2     1O2     0P5     1O2 
+
+read file 1 page 4
+Buffer List:    0P5     0Q2     1O2     0P5 
+
+write file 0 page 2 -> 0R2
+Buffer List:    0R2     0P5     1O2     0P5 
+
+read file 0 page 1
+Buffer List:    003     0R2     0P5     1O2 
+
+write file 1 page 3 -> 1S3
+Buffer List:    1S3     003     0R2     0P5 
+
+read file 1 page 5
+Buffer List:    0C2     1S3     003     0R2 
+
+write file 1 page 2 -> 1T2
+Buffer List:    1T2     0C2     1S3     003 
+  -------- files closed -------  
+Buffer List:(empty) (empty) (empty) (empty) 
+  -------- files opened -------  
+
+read file 1 page 0
+Buffer List:    1O2 (empty) (empty) (empty) 
+
+write file 1 page 4 -> 1A4
+Buffer List:    1A4     1O2 (empty) (empty) 
+
+read file 0 page 1
+Buffer List:    003     1A4     1O2 (empty) 
+
+write file 0 page 5 -> 0B5
+Buffer List:    0B5     003     1A4     1O2 
+
+read file 1 page 1
+Buffer List:    103     0B5     003     1A4 
+
+write file 0 page 4 -> 0C4
+Buffer List:    0C4     103     0B5     003 
+
+read file 0 page 0
+Buffer List:    002     0C4     103     0B5 
+
+write file 0 page 0 -> 0D0
+Buffer List:    0D0     0C4     103     0B5 
+
+read file 0 page 5
+Buffer List:    0B5     0D0     0C4     103 
+
+write file 0 page 5 -> 0E5
+Buffer List:    0E5     0D0     0C4     103 
+
+read file 0 page 4
+Buffer List:    0C4     0E5     0D0     103 
+
+write file 0 page 5 -> 0F5
+Buffer List:    0F5     0C4     0D0     103 
+
+read file 0 page 2
+Buffer List:    1T2     0F5     0C4     0D0 
+
+write file 0 page 4 -> 0G4
+Buffer List:    0G4     1T2     0F5     0D0 
+
+read file 1 page 4
+Buffer List:    0C4     0G4     1T2     0F5 
+
+write file 0 page 3 -> 0H3
+Buffer List:    0H3     0C4     0G4     1T2 
+
+read file 0 page 0
+Buffer List:    0G4     0H3     0C4     0G4 
+
+write file 1 page 3 -> 1I3
+Buffer List:    1I3     0G4     0H3     0C4 
+
+read file 1 page 5
+Buffer List:    0C2     1I3     0G4     0H3 
+
+write file 1 page 5 -> 1J5
+Buffer List:    1J5     1I3     0G4     0H3 
+
+read file 1 page 1
+Buffer List:    103     1J5     1I3     0G4 
+
+write file 1 page 0 -> 1K0
+Buffer List:    1K0     103     1J5     1I3 
+
+read file 1 page 5
+Buffer List:    1J5     1K0     103     1I3 
+
+write file 0 page 1 -> 0L1
+Buffer List:    0L1     1J5     1K0     103 
+
+read file 0 page 0
+Buffer List:    0G4     0L1     1J5     1K0 
+
+write file 0 page 3 -> 0M3
+Buffer List:    0M3     0G4     0L1     1J5 
+
+read file 1 page 4
+Buffer List:    0C4     0M3     0G4     0L1 
+
+write file 1 page 2 -> 1N2
+Buffer List:    1N2     0C4     0M3     0G4 
+
+read file 0 page 1
+Buffer List:    1N2     1N2     0C4     0M3 
+
+write file 0 page 0 -> 0O0
+Buffer List:    0O0     1N2     1N2     0C4 
+
+read file 0 page 4
+Buffer List:    1I3     0O0     1N2     1N2 
+
+write file 0 page 1 -> 0P1
+Buffer List:    0P1     1I3     0O0     1N2 
+
+read file 0 page 0
+Buffer List:    0O0     0P1     1I3     1N2 
+
+write file 1 page 5 -> 1Q5
+Buffer List:    1Q5     0O0     0P1     1I3 
+
+read file 0 page 5
+Buffer List:    0H3     1Q5     0O0     0P1 
+
+write file 0 page 5 -> 0R5
+Buffer List:    0R5     1Q5     0O0     0P1 
+
+read file 0 page 5
+Buffer List:    0R5     1Q5     0O0     0P1 
+
+write file 0 page 4 -> 0S4
+Buffer List:    0S4     0R5     1Q5     0O0 
+
+read file 1 page 2
+Buffer List:    1Q5     0S4     0R5     1Q5 
+
+write file 1 page 5 -> 1T5
+Buffer List:    1T5     1Q5     0S4     0R5 
+  -------- files closed -------  
+Buffer List:(empty) (empty) (empty) (empty) 
+---------- test2 end ----------
+

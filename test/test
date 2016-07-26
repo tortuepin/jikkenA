@@ -1,0 +1,3 @@
+create table student (name string, age integer)
+insert into student values (suzuki, 10)
+select * from student where age < 20
