@@ -119,6 +119,7 @@ Result insertRecord(char *tableName, RecordData *recordData)
     if ((record = (char *)malloc(recordSize)) == NULL) {
         printErrorMessage(ERR_MSG_MALLOC, __func__, __LINE__);
     }
+    memset(record, 0, recordSize);
     p = record;
 
     /* 先頭に、「使用中」を意味するフラグを立てる */

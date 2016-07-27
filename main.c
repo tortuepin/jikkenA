@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "microdb.h"
+#include <readline/readline.h>
+#include <readline/history.h>
 
 /*
  * MAX_INPUT -- 入力行の最大文字数
@@ -448,7 +450,9 @@ void callSelectRecord()
     char *token;
     char *tableName;
     char *fieldName;
+    char *str;
     int numField;
+    int i;
     TableInfo *tableInfo;
     Condition condition;
     FieldInfo fieldInfo;
@@ -511,7 +515,23 @@ void callSelectRecord()
         freeTableInfo(tableInfo);
         return;
     }
+
     fieldName = token;
+
+    /* 条件式に指定されたフィールドのデータ型を調べる */
+    condition.dataType = TYPE_UNKNOWN;
+    for (i = 0; i < tableInfo->numField; i++) {
+        if (strcmp(tableInfo->fieldInfo[i].name, fieldName) == 0) {
+            /* フィールドのデータ型を構造体に設定してループを抜ける */
+            condition.dataType = tableInfo->fieldInfo[i].dataType;
+            break;
+        }
+    }
+
+    freeTableInfo(tableInfo);
+
+
+
 
     token = getNextToken();
     ope = checkOperator(token);
@@ -525,30 +545,39 @@ void callSelectRecord()
     }
 
 
+    //「'」に囲まれているか確認
     token = getNextToken();
-    if(fieldInfo.dataType == TYPE_INTEGER){
+    if(strcmp(token, "") == 0){
+        printf("文字列が不正です\n");
+        return;
+    }
+    if(condition.dataType == TYPE_INTEGER){
+        //int型の場合
         condition.intValue = atoi(token);
     }
-    else if(fieldInfo.dataType == TYPE_STRING){
-        strcpy(condition.stringValue, token);
-
+    else if(condition.dataType == TYPE_STRING){
+        //stringがたの場合
+        //「'」を取り除く
+        if(strcmp(&token[0], "'") != 0 && strcmp(&token[strlen(token)-1], "'") != 0){
+            printf("文字列は「'」で囲んでください");
+            return;
+        }
+        str = strtok(token, "'");
+        strcpy(condition.stringValue, str);
     }
     else{
         printf("入力行に間違いがあります\n");
-        freeTableInfo(tableInfo);
         return;
     }
 
    //conditionにセットする
    strcpy(condition.name, fieldName);
-   condition.dataType = fieldInfo.dataType;
    condition.operator = ope;
 
 
 
    if((recordSet = selectRecord(tableName, &condition)) == NULL){
        printf("検索に失敗しました");
-       freeTableInfo(tableInfo);
        return;
    }
 
@@ -621,9 +650,11 @@ FieldInfo checkFieldName(char *fieldName, TableInfo *tableInfo){
  */
 void callDeleteRecord()
 {
+    int i;
     char *tableName;
     char *token;
     char *fieldName;
+    char *str;
     TableInfo *tableInfo;
     Condition condition;
     FieldInfo fieldInfo;
@@ -666,6 +697,18 @@ void callDeleteRecord()
     }
     fieldName = token;
 
+    /* 条件式に指定されたフィールドのデータ型を調べる */
+    condition.dataType = TYPE_UNKNOWN;
+    for (i = 0; i < tableInfo->numField; i++) {
+        if (strcmp(tableInfo->fieldInfo[i].name, fieldName) == 0) {
+            /* フィールドのデータ型を構造体に設定してループを抜ける */
+            condition.dataType = tableInfo->fieldInfo[i].dataType;
+            break;
+        }
+    }
+
+    freeTableInfo(tableInfo);
+
     token = getNextToken();
     ope = checkOperator(token);
 
@@ -678,13 +721,26 @@ void callDeleteRecord()
     }
 
 
+    //検索文字列
+    //「'」外したりとか
     token = getNextToken();
-    if(fieldInfo.dataType == TYPE_INTEGER){
+    if(strcmp(token, "") == 0){
+        printf("文字列が不正です\n");
+        return;
+    }
+    if(condition.dataType == TYPE_INTEGER){
+        //int型の場合
         condition.intValue = atoi(token);
     }
-    else if(fieldInfo.dataType == TYPE_STRING){
-        strcpy(condition.stringValue, token);
-
+    else if(condition.dataType == TYPE_STRING){
+        //stringがたの場合
+        //「'」を取り除く
+        if(strcmp(&token[0], "'") != 0 && strcmp(&token[strlen(token)-1], "'") != 0){
+            printf("文字列は「'」で囲んでください");
+            return;
+        }
+        str = strtok(token, "'");
+        strcpy(condition.stringValue, str);
     }
     else{
         printf("入力行に間違いがあります\n");
@@ -694,16 +750,13 @@ void callDeleteRecord()
 
    //conditionにセットする
    strcpy(condition.name, fieldName);
-   condition.dataType = fieldInfo.dataType;
    condition.operator = ope;
 
    if(deleteRecord(tableName, &condition) == NG){
-       printf("デリート失敗しました");
-       freeTableInfo(tableInfo);
+       printf("%sのデリート失敗しました", condition.stringValue);
    }
 
-   printf("デリートしました");
-   freeTableInfo(tableInfo);
+   printf("%sをデリートしました", condition.stringValue);
 
 }
 
@@ -714,6 +767,7 @@ int main()
 {
     char input[MAX_INPUT];
     char *token;
+    char *line;
 
     /* ファイルモジュールの初期化 */
     if (initializeFileModule() != OK) {
@@ -740,18 +794,23 @@ int main()
     for(;;) {
 	/* プロンプトの出力 */
 	printf("\nDDLまたはDMLを入力してください。\n");
-	printf("> ");
+    line = readline("> ");
 
-	/* キーボード入力を1行読み込む */
-	fgets(input, MAX_INPUT, stdin);
+    /* EOFになったら終了 */
+    if (line == NULL) {
+        printf("マイクロDBMSを終了します。\n\n");
+        break;
+    }
+    /* 字句解析するために入力文字列を設定する */
+    strncpy(input, line, MAX_INPUT);
+    setInputString(input);
 
-	/* 入力の最後の改行を取り除く */
-	if (strchr(input, '\n') != NULL) {
-	    *(strchr(input, '\n')) = '\0';
-	}
+    /* 入力の履歴を保存する */
+    if (line && *line) {
+        add_history(line);
+    }
 
-	/* 字句解析するために入力文字列を設定する */
-	setInputString(input);
+    free(line);
 
 	/* 最初のトークンを取り出す */
 	token = getNextToken();

@@ -18,7 +18,7 @@ do-test: test-file
 # 「microdb」を作成するためのルールは、今後追加される予定
 # とりあえず、今のところは「何もしない」という設定にしておく。
 microdb: file.o datadef.o datamanip.o error.o main.o
-	$(CC) -o microdb $(CFLAGS) file.o datadef.o datamanip.o error.o main.o
+	$(CC) -o microdb $(CFLAGS) file.o datadef.o datamanip.o error.o main.o -lreadline -lcurses
 
 test-buffer: test-buffer.o file.o 
 	$(CC) -o test-buffer $(CFLAGS) test-buffer.o file.o

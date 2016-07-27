@@ -160,7 +160,7 @@ File *openFile(char *filename)
  */
 Result closeFile(File *file)
 {
-    Buffer *buf;
+    Buffer *buf = NULL;
     /* バッファ探し*/
     /* 見つけたらファイルに書き込む*/
     for (buf = bufferListHead; buf != NULL; buf = buf->next) {
@@ -168,12 +168,12 @@ Result closeFile(File *file)
         if (buf->file == file) {
             if(buf->modified == MODIFIED){
                 /* 要求されたページがバッファにあったので、その内容をファイルに書き込む */
-                if(lseek(file->desc, buf->pageNum*PAGE_SIZE, SEEK_SET) == -1){
+                if(lseek(buf->file->desc, buf->pageNum*PAGE_SIZE, SEEK_SET) == -1){
                     /* エラー*/
                     printf("close失敗");
                     return NG;
                 }
-                if (write(file->desc, buf->page, PAGE_SIZE) < PAGE_SIZE) {
+                if (write(buf->file->desc, buf->page, PAGE_SIZE) < PAGE_SIZE) {
                     /* エラー処理 */
                     printf("クローズシッパイ");
                     return NG;
@@ -209,7 +209,7 @@ Result closeFile(File *file)
  */
 Result readPage(File *file, int pageNum, char *page)
 {
-    Buffer *buf;
+    Buffer *buf = NULL;;
     Buffer *emptyBuf = NULL;
 
     /*
@@ -227,7 +227,7 @@ Result readPage(File *file, int pageNum, char *page)
 
             return OK;
         }
-        if(buf->file == NULL){
+        if(buf->file == NULL && buf->pageNum == -1){
             /* bufの中身が空だったら保存 */
             emptyBuf = buf;
         }
@@ -269,12 +269,12 @@ Result readPage(File *file, int pageNum, char *page)
     }
 
     /* 1ページ分のデータの読み出し */
-    if (read(file->desc, emptyBuf->page, PAGE_SIZE) < PAGE_SIZE) {
+    if (read(file->desc, page, PAGE_SIZE) < PAGE_SIZE) {
         return NG;
     }
 
     /* バッファの内容を引数のpageにコピー */
-    memcpy(page, emptyBuf->page, PAGE_SIZE);
+    memcpy(emptyBuf->page, page, PAGE_SIZE);
 
     /* Buffer構造体(emptyBuf)への各種情報の設定 */
     emptyBuf->file = file;
@@ -302,7 +302,7 @@ Result readPage(File *file, int pageNum, char *page)
  */
 Result writePage(File *file, int pageNum, char *page)
 {
-    Buffer *buf;
+    Buffer *buf = NULL;;
     Buffer *emptyBuf = NULL;
 
     
@@ -327,7 +327,7 @@ Result writePage(File *file, int pageNum, char *page)
         }
 
         //ついでに空きを見つける
-        if(buf->file == NULL){
+        if(buf->file == NULL && buf->pageNum == -1){
             emptyBuf = buf;
         }
         
@@ -556,5 +556,18 @@ void printBufferList()
     printf("\n");
 }
 
+
+Result readPage2(File *file, int pageNum, char *page){
+    lseek(file->desc, pageNum*PAGE_SIZE, SEEK_SET);
+    read(file->desc, page, PAGE_SIZE);
+
+    return OK;
+}
+
+Result writePage2(File *file, int pageNum, char *page){
+    lseek(file->desc, pageNum*PAGE_SIZE, SEEK_SET);
+    write(file->desc, page, PAGE_SIZE);
+    return OK;
+}
 
 
