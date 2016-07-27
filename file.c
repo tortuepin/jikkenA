@@ -178,13 +178,13 @@ Result closeFile(File *file)
                     printf("クローズシッパイ");
                     return NG;
                 }
+	    }
 
-                /* アクセスされたバッファを、空にする */
-                buf->file = NULL;
-                buf->pageNum = -1;
-                buf->modified = UNMODIFIED;
-                memset(buf->page, 0, PAGE_SIZE);
-            }
+	    /* アクセスされたバッファを、空にする */
+	    buf->file = NULL;
+	    buf->pageNum = -1;
+	    buf->modified = UNMODIFIED;
+	    memset(buf->page, 0, PAGE_SIZE);
         }
     }
 
@@ -227,7 +227,7 @@ Result readPage(File *file, int pageNum, char *page)
 
             return OK;
         }
-        if(buf->file == NULL && buf->pageNum == -1){
+        if(buf->file == NULL){
             /* bufの中身が空だったら保存 */
             emptyBuf = buf;
         }
@@ -327,7 +327,7 @@ Result writePage(File *file, int pageNum, char *page)
         }
 
         //ついでに空きを見つける
-        if(buf->file == NULL && buf->pageNum == -1){
+        if(buf->file == NULL){
             emptyBuf = buf;
         }
         
